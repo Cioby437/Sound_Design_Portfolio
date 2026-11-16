@@ -36,9 +36,12 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; letter-spacing: 0.02
   transition: opacity 0.4s linear;
 }
 .site-header, main, .site-footer { position: relative; z-index: 1; }
+/* static fallback when WebGL isn't available */
+.no-webgl #bg { display: none; }
+.no-webgl .hero { background: url("assets/cassette-fallback.jpg") center 30% / min(900px, 92vw) auto no-repeat; }
 
 /* ---------- header ---------- */
-.site-header { background: var(--black); padding: 0 48px; }
+.site-header { background: transparent; padding: 0 48px; }
 .topbar {
   max-width: var(--max);
   margin: 0 auto;
