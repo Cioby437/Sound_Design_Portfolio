@@ -1,5 +1,15 @@
 import * as THREE from 'three';
 
+// Append ?debug to the URL to see renderer status in the corner.
+const DEBUG = location.search.includes('debug');
+const dbg = (msg) => {
+  if (!DEBUG) return;
+  let el = document.getElementById('dbg');
+  if (!el) { el = document.createElement('pre'); el.id = 'dbg'; el.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:9;color:#0f0;font:12px monospace;margin:0;background:#000a;padding:6px'; document.body.appendChild(el); }
+  el.textContent += msg + '\n';
+};
+window.addEventListener('error', (e) => dbg('error: ' + e.message));
+
 /* =========================================================
    Particle cassette
    assets/cassette.bin = [uint32 count][int16 xyz * count][uint8 rgb * count]
@@ -147,6 +157,7 @@ async function loadCassette() {
   });
 
   points = new THREE.Points(geo, mat);
+  dbg('points: ' + count + ', gl: ' + renderer.getContext().getParameter(renderer.getContext().VERSION));
   pivot.add(points);
 }
 
@@ -252,7 +263,8 @@ function frame() {
   requestAnimationFrame(frame);
 }
 
-loadCassette().catch((e) => console.error('Could not load cassette particles', e));
+loadCassette().catch((e) => { console.error('Could not load cassette particles', e); dbg('load failed: ' + e); });
+dbg('module ok');
 frame();
 
 /* =========================================================
